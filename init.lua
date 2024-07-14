@@ -200,8 +200,12 @@ vim.keymap.set('n', '<M-s>', '<C-W>-')
 vim.keymap.set('n', '<M-p>', '<cmd>tabprevious<CR>', { desc = 'Move to the previous tab' })
 vim.keymap.set('n', '<M-n>', '<cmd>tabnext<CR>', { desc = 'Move to the next tab' })
 vim.keymap.set('n', '<C-p>', '<cmd>bprevious<CR>', { desc = 'move to the previous buffer' })
-vim.keymap.set('n', '<C-n>', '<cmd>bprevious<CR>', { desc = 'move to the next buffer' })
-vim.keymap.set('n', '<C-b>d', '<cmd>bdelete<CR>', { desc = 'Delete current buffer' })
+vim.keymap.set('n', '<C-n>', '<cmd>bnext<CR>', { desc = 'move to the next buffer' })
+vim.keymap.set('n', '<C-w>b', '<cmd>bdelete<CR>', { desc = 'Delete current buffer' })
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'left cursor always in the middle when pressing ctrl d' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'left cursor always in the middle when pressing ctrl u' })
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'center when searching forward' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'center when searching backwards' })
 
 -- move the current line up or down one line
 vim.keymap.set('n', '<M-j>', function()
@@ -257,7 +261,26 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  { 'wakatime/vim-wakatime', lazy = false },
+  {
+    'akinsho/bufferline.nvim',
+    version = '*',
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function(self, opts)
+      require('bufferline').setup()
+    end,
+  },
 
+  {
+    'ggandor/leap.nvim',
+    config = function(self, opts)
+      require 'leap'
+      vim.keymap.set('n', 'f', '<Plug>(leap)')
+      vim.keymap.set('n', 'F', '<Plug>(leap-from-window)')
+      vim.keymap.set({ 'x', 'o' }, 's', '<Plug>(leap-forward)')
+      vim.keymap.set({ 'x', 'o' }, 'F', '<Plug>(leap-backward)')
+    end,
+  },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -290,18 +313,18 @@ require('lazy').setup({
   --    require('gitsigns').setup({ ... })
   --
   -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
+  -- { -- Adds git related signs to the gutter, as well as utilities for managing changes
+  --   'lewis6991/gitsigns.nvim',
+  --   opts = {
+  --     signs = {
+  --       add = { text = '+' },
+  --       change = { text = '~' },
+  --       delete = { text = '_' },
+  --       topdelete = { text = '‾' },
+  --       changedelete = { text = '~' },
+  --     },
+  --   },
+  -- },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -927,11 +950,11 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.

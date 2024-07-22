@@ -100,7 +100,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'CursorHoldI', 'FocusGai
 })
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -174,7 +174,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
+vim.keymap.set('n', '<leader>ee', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
@@ -268,6 +268,82 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   { 'wakatime/vim-wakatime', lazy = false },
+  {
+    'kelly-lin/ranger.nvim',
+    config = function()
+      require('ranger-nvim').setup { replace_netrw = true }
+      vim.api.nvim_set_keymap('n', '<leader>ef', 'Open [F]ile Manager', {
+        noremap = true,
+        callback = function()
+          require('ranger-nvim').open(true)
+        end,
+      })
+    end,
+  },
+  {
+    'gelguy/wilder.nvim',
+    config = function(self, opts)
+      local wilder = require 'wilder'
+      wilder.setup { modes = { ':', '/', '?' } }
+      wilder.set_option(
+        'renderer',
+        wilder.popupmenu_renderer(wilder.popupmenu_border_theme {
+          highlights = {
+            border = 'Normal', -- highlight to use for the border
+          },
+          -- 'single', 'double', 'rounded' or 'solid'
+          -- can also be a list of 8 characters, see :h wilder#popupmenu_border_theme() for more details
+          border = 'rounded',
+        })
+      )
+      local gradient = {
+        '#f4468f',
+        '#fd4a85',
+        '#ff507a',
+        '#ff566f',
+        '#ff5e63',
+        '#ff6658',
+        '#ff704e',
+        '#ff7a45',
+        '#ff843d',
+        '#ff9036',
+        '#f89b31',
+        '#efa72f',
+        '#e6b32e',
+        '#dcbe30',
+        '#d2c934',
+        '#c8d43a',
+        '#bfde43',
+        '#b6e84e',
+        '#aff05b',
+      }
+
+      for i, fg in ipairs(gradient) do
+        gradient[i] = wilder.make_hl('WilderGradient' .. i, 'Pmenu', { { a = 1 }, { a = 1 }, { foreground = fg } })
+      end
+
+      wilder.set_option(
+        'renderer',
+        wilder.popupmenu_renderer {
+          highlights = {
+            gradient = gradient, -- must be set
+            -- selected_gradient key can be set to apply gradient highlighting for the selected candidate.
+          },
+          highlighter = wilder.highlighter_with_gradient {
+            wilder.basic_highlighter(), -- or wilder.lua_fzy_highlighter(),
+          },
+        }
+      )
+      wilder.set_option(
+        'renderer',
+        wilder.popupmenu_renderer {
+          highlighter = wilder.basic_highlighter(),
+          left = { ' ', wilder.popupmenu_devicons() },
+          right = { ' ', wilder.popupmenu_scrollbar() },
+        }
+      )
+    end,
+  },
   {
     'akinsho/bufferline.nvim',
     version = '*',
@@ -688,7 +764,7 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        { 'stylua', 'vale' }, -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

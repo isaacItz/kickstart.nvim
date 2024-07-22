@@ -10,6 +10,24 @@ A starting point for Neovim that is:
 
 **NOT** a Neovim distribution, but instead a starting point for your configuration.
 
+## How to setup Vale
+You have to sync the vale package for the first usage:
+
+    You can create a ~/.config/vale/.vale.ini file
+    Then use full path to sync the mason package with the global config. ~/.local/share/nvim/mason/packages/vale/vale --config=$HOME/.config/vale/.vale.ini sync
+
+This is my .vale.ini:
+StylesPath = .
+MinAlertLevel = suggestion
+Packages = RedHat, alex
+[*]
+BasedOnStyles = Vale, RedHat, alex
+
+Use styles=. so it syncs your sytles to where the global config is store. I hate clutter in my home folder
+
+EDIT: source: https://docs.rockylinux.org/books/nvchad/vale_nvchad/#__tabbed_1_2
+https://github.com/mfussenegger/nvim-lint/issues/528
+
 ## Installation
 
 ### Install Neovim

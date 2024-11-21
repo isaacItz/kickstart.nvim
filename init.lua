@@ -742,7 +742,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        tsserver = {},
+        ts_ls = {},
         --
 
         lua_ls = {
@@ -835,6 +835,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        xml = { 'xmllint' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

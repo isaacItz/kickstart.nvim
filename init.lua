@@ -266,6 +266,41 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+  -- {
+  --   'mfussenegger/nvim-jdtls',
+  --   config = function()
+  --     local config = {
+  --       cmd = { '/home/lugo/.local/share/nvim/mason/bin/jdtls' },
+  --       root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git', 'mvnw' }, { upward = true })[1]),
+  --     }
+  --     autocmd FileType java require('jdtls').start_or_attach(config)
+  --   end,
+  -- },
+  {
+    'nvim-tree/nvim-tree.lua',
+    config = function()
+      require('nvim-tree').setup {
+        sort = {
+          sorter = 'case_sensitive',
+        },
+        view = {
+          width = 30,
+        },
+        renderer = {
+          group_empty = true,
+        },
+        filters = {
+          dotfiles = true,
+        },
+      }
+      vim.api.nvim_set_keymap('n', '<leader>et', 'Open [T]ree explorer', {
+        noremap = true,
+        callback = function()
+          require('nvim-tree.api').tree.toggle()
+        end,
+      })
+    end,
+  },
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   { 'wakatime/vim-wakatime', lazy = false },
   {
@@ -554,6 +589,11 @@ require('lazy').setup({
           prompt_title = 'Live Grep in Open Files',
         }
       end, { desc = '[S]earch [/] in Open Files' })
+
+      -- Shortcut for searching your Neovim configuration files
+      vim.keymap.set('n', '<leader>sp', function()
+        builtin.find_files { cwd = vim.fn.stdpath 'config' }
+      end, { desc = '[S]earch [P]project files' })
 
       -- Shortcut for searching your Neovim configuration files
       vim.keymap.set('n', '<leader>sn', function()

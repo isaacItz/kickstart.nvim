@@ -4,7 +4,7 @@ return {
   {
     lazy = false,
     priority = 1000,
-    dir = '~/plugins/colorbuddy.nvim',
+    dir = '~/.local/share/nvim/lazy/colorbuddy.nvim',
     config = function()
       vim.g.termguicolors = true
       vim.cmd.colorscheme 'gruvbox'

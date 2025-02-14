@@ -212,6 +212,8 @@ vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'left cursor always in the midd
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'left cursor always in the middle when pressing ctrl u' })
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'center when searching forward' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'center when searching backwards' })
+vim.keymap.set('x', 'C', '"_C', { desc = 'change without yank' })
+vim.keymap.set('x', 'c', '"_c', { desc = 'change without yank' })
 
 -- move the current line up or down one line
 vim.keymap.set('n', '<M-j>', function()
@@ -276,6 +278,10 @@ require('lazy').setup({
   --     autocmd FileType java require('jdtls').start_or_attach(config)
   --   end,
   -- },
+  -- Lua
+  {
+    'tjdevries/colorbuddy.nvim',
+  },
   {
     'nvim-tree/nvim-tree.lua',
     config = function()
@@ -379,14 +385,14 @@ require('lazy').setup({
       )
     end,
   },
-  {
-    'akinsho/bufferline.nvim',
-    version = '*',
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    config = function(self, opts)
-      require('bufferline').setup()
-    end,
-  },
+  -- {
+  --   'akinsho/bufferline.nvim',
+  --   version = '*',
+  --   dependencies = 'nvim-tree/nvim-web-devicons',
+  --   config = function(self, opts)
+  --     require('bufferline').setup()
+  --   end,
+  -- },
 
   {
     'ggandor/leap.nvim',
@@ -734,6 +740,7 @@ require('lazy').setup({
               end,
             })
           end
+          --- Guard against servers without the signatureHelper capability
 
           -- The following autocommand is used to enable inlay hints in your
           -- code, if the language server you are using supports them
@@ -921,6 +928,7 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'hrsh7th/cmp-nvim-lsp-signature-help',
     },
     config = function()
       -- See `:help cmp`
@@ -992,6 +1000,7 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'nvim_lsp_signature_help' },
         },
       }
     end,
